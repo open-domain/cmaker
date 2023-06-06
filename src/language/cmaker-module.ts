@@ -44,12 +44,23 @@ export function get_currently_highlighted_file()
     return CurrentlyHighlightedFile;
 }
 
+var CurrentlyOpenedFile : string | undefined;
+export function set_currently_opened_file(file_path : string | undefined)
+{
+    CurrentlyOpenedFile = file_path;
+}
+
+export function get_currently_opened_file()
+{
+    return CurrentlyOpenedFile;
+}
+
 export class CmakerCommandHandler extends AbstractExecuteCommandHandler
 {
     override registerCommands(acceptor: ExecuteCommandAcceptor): void {
         const generate_model_command = 'cmaker.generate';    
         acceptor(generate_model_command, () => {
-                const activeEditor = CurrentlyHighlightedFile;
+                const activeEditor = CurrentlyOpenedFile;
                 return generateCmakeFile(activeEditor);
         });
     }
