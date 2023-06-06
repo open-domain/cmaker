@@ -1,0 +1,12 @@
+{
+    "projectName": "Cmaker",
+    "languages": [{
+        "id": "cmaker",
+        "grammar": "src/language/cmaker.langium",
+        "fileExtensions": [".cmaker"],
+        "textMate": {
+            "out": "syntaxes/cmaker.tmLanguage.json"
+        }
+    }],
+    "out": "src/language/generated"
+}
