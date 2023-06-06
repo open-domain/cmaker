@@ -1,9 +1,11 @@
 import {
-    createDefaultModule, createDefaultSharedModule, DefaultSharedModuleContext, inject,
+    AbstractExecuteCommandHandler,
+    createDefaultModule, createDefaultSharedModule, DefaultSharedModuleContext, ExecuteCommandAcceptor, inject,
     LangiumServices, LangiumSharedServices, Module, PartialLangiumServices
 } from 'langium';
 import { CmakerGeneratedModule, CmakerGeneratedSharedModule } from './generated/module';
 import { CmakerValidator, registerValidationChecks } from './cmaker-validator';
+import { generateCmakeFile } from '../cli/generator';
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -30,6 +32,28 @@ export const CmakerModule: Module<CmakerServices, PartialLangiumServices & Cmake
         CmakerValidator: () => new CmakerValidator()
     }
 };
+
+var CurrentlyHighlightedFile : string | undefined;
+export function set_currently_highlighted_file(file_path : string | undefined)
+{
+    CurrentlyHighlightedFile = file_path;
+}
+
+export function get_currently_highlighted_file()
+{
+    return CurrentlyHighlightedFile;
+}
+
+export class CmakerCommandHandler extends AbstractExecuteCommandHandler
+{
+    override registerCommands(acceptor: ExecuteCommandAcceptor): void {
+        const generate_model_command = 'cmaker.generate';    
+        acceptor(generate_model_command, () => {
+                const activeEditor = CurrentlyHighlightedFile;
+                return generateCmakeFile(activeEditor);
+        });
+    }
+}
 
 /**
  * Create the full set of services required by Langium.
@@ -61,5 +85,8 @@ export function createCmakerServices(context: DefaultSharedModuleContext): {
     );
     shared.ServiceRegistry.register(Cmaker);
     registerValidationChecks(Cmaker);
+
+    shared.lsp.ExecuteCommandHandler = new CmakerCommandHandler();
+
     return { shared, Cmaker };
 }

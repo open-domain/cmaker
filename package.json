@@ -37,6 +37,35 @@
         "Programming Languages"
     ],
     "contributes": {
+        "commands": [
+            {
+                "command": "cmaker.generate",
+                "title": "Generate cmake file",
+                "shortTitle": "cmakegen",
+                "category": "cmaker",
+                "icon": {
+                    "light": "images/hammer.png",
+                    "dark": "images/hammer.png"
+                }
+            }
+        ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "cmaker.generate",
+                    "title": "Generate cmake file",
+                    "when": "resourceExtname == .cmaker"
+                }
+            ],
+            "editor/title": [
+                {
+                    "command": "cmaker.generate",
+                    "title": "Generate cmake file",
+                    "when": "resourceExtname == .cmaker",
+                    "group": "navigation"
+                }
+            ]
+        },
         "languages": [
             {
                 "id": "cmaker",
@@ -57,7 +86,8 @@
         ]
     },
     "activationEvents": [
-        "onLanguage:cmaker"
+        "onLanguage:cmaker",
+        "onCommand:cmaker.generate"
     ],
     "main": "./out/extension/main.js",
     "bin": {
