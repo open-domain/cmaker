@@ -1,0 +1,3 @@
+[submodule "cmaker-cli"]
+	path = src/cli
+	url = https://github.com/open-domain/cmaker-cli.git
